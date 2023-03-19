@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option go_package = "proto/user";
+
+package user;
+
+message UserCreateRequest {
+  string name = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message UserUpdateRequest {
+  int64 id = 1;
+  string name = 2;
+  string username = 3;
+}
+
+message UserByIDRequest {
+  int64 id = 1;
+}
+
+message User {
+  uint64 id = 1;
+  string name = 2;
+  string username = 3;
+  string created_at = 4;
+  string updated_at = 5;
+  string deleted_at = 6;
+}
+
+message UserResponse {
+  uint64 id = 1;
+  string name = 2;
+  string username = 3;
+  string created_at = 4;
+  string updated_at = 5;
+}
+
+message UsersResponse {
+  repeated UserResponse users = 4;
+}
+
+message UserListQuery {
+}
+
+message UserDeleteResponse {
+  string message = 1;
+}
+
+service UserService {
+  rpc GetUserList(UserListQuery) returns (UsersResponse) {}
+  rpc CreateUser(UserCreateRequest) returns (UserResponse) {}
+  rpc UpdateUser(UserUpdateRequest) returns (UserResponse) {}
+  rpc GetUser(UserByIDRequest) returns (UserResponse) {}
+  rpc DeleteUser(UserByIDRequest) returns (UserDeleteResponse) {}
+}
+
+
+
+
