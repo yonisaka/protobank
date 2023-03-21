@@ -9,7 +9,7 @@ service BookService {
     rpc GetUserList(BookListQuery) returns (BooksResponse) {}
     rpc CreateBook(BookCreateRequest) returns (BookResponse) {}
     rpc UpdateBook(BookUpdateRequest) returns (BookResponse) {}
-    rpc DeleteUser(BookByIDRequest) returns (BookDeleteResponse) {}
+    rpc DeleteBook(BookByIDRequest) returns (BookDeleteResponse) {}
 }
 
 message BookByIDRequest {
