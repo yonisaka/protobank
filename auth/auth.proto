@@ -7,7 +7,7 @@ package auth;
 service Auth {
   rpc AuthRegister(IAuth) returns (RegisterResponse) {}
   rpc AuthLogin(AuthLoginPayload) returns (LoginResponse) {}
-  rpc AuthB2B(AuthLoginPayloadB2B) returns (UserResponse) {}
+  rpc AuthB2B(AuthB2BPayload) returns (UserResponse) {}
 }
 
 message IAuth {
@@ -21,7 +21,7 @@ message AuthLoginPayload {
   string password = 2;
 }
 
-message AuthLoginPayloadB2B {
+message AuthB2BPayload {
   string token = 1;
 }
 
