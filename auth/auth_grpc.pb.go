@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type AuthClient interface {
 	AuthRegister(ctx context.Context, in *IAuth, opts ...grpc.CallOption) (*RegisterResponse, error)
 	AuthLogin(ctx context.Context, in *AuthLoginPayload, opts ...grpc.CallOption) (*LoginResponse, error)
+	AuthB2B(ctx context.Context, in *AuthB2BPayload, opts ...grpc.CallOption) (*UserResponse, error)
 }
 
 type authClient struct {
@@ -52,12 +53,22 @@ func (c *authClient) AuthLogin(ctx context.Context, in *AuthLoginPayload, opts .
 	return out, nil
 }
 
+func (c *authClient) AuthB2B(ctx context.Context, in *AuthB2BPayload, opts ...grpc.CallOption) (*UserResponse, error) {
+	out := new(UserResponse)
+	err := c.cc.Invoke(ctx, "/auth.Auth/AuthB2B", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServer is the server API for Auth service.
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility
 type AuthServer interface {
 	AuthRegister(context.Context, *IAuth) (*RegisterResponse, error)
 	AuthLogin(context.Context, *AuthLoginPayload) (*LoginResponse, error)
+	AuthB2B(context.Context, *AuthB2BPayload) (*UserResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedAuthServer) AuthRegister(context.Context, *IAuth) (*RegisterR
 }
 func (UnimplementedAuthServer) AuthLogin(context.Context, *AuthLoginPayload) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AuthLogin not implemented")
+}
+func (UnimplementedAuthServer) AuthB2B(context.Context, *AuthB2BPayload) (*UserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AuthB2B not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 
@@ -120,6 +134,24 @@ func _Auth_AuthLogin_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Auth_AuthB2B_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthB2BPayload)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).AuthB2B(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.Auth/AuthB2B",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).AuthB2B(ctx, req.(*AuthB2BPayload))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Auth_ServiceDesc is the grpc.ServiceDesc for Auth service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AuthLogin",
 			Handler:    _Auth_AuthLogin_Handler,
+		},
+		{
+			MethodName: "AuthB2B",
+			Handler:    _Auth_AuthB2B_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
