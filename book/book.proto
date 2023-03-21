@@ -6,7 +6,7 @@ package book;
 
 service BookService {
     rpc GetBook(BookByIDRequest) returns (BookResponse) {}
-    rpc GetUserList(BookListQuery) returns (BooksResponse) {}
+    rpc GetBookList(BookListQuery) returns (BooksResponse) {}
     rpc CreateBook(BookCreateRequest) returns (BookResponse) {}
     rpc UpdateBook(BookUpdateRequest) returns (BookResponse) {}
     rpc DeleteBook(BookByIDRequest) returns (BookDeleteResponse) {}
