@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option go_package = "proto/book";
+
+package book;
+
+service BookService {
+    rpc GetBook(BookByIDRequest) returns (BookResponse) {}
+    rpc GetUserList(BookListQuery) returns (BooksResponse) {}
+    rpc CreateBook(BookCreateRequest) returns (BookResponse) {}
+    rpc UpdateBook(BookUpdateRequest) returns (BookResponse) {}
+    rpc DeleteUser(BookByIDRequest) returns (BookDeleteResponse) {}
+}
+
+message BookByIDRequest {
+    int64 id = 1;
+}
+
+message BookListQuery {
+}
+
+message BookCreateRequest {
+    string title = 1;
+    string description = 2;
+}
+
+message BookUpdateRequest {
+    int64 id = 1;
+    string title = 2;
+    string description = 3;
+}
+
+message BookResponse {
+    uint64 id = 1;
+    string title = 2;
+    string description = 3;
+    string created_at = 4;
+    string updated_at = 5;
+}
+
+message BooksResponse {
+    repeated BookResponse books = 1;
+}
+  
+message BookDeleteResponse {
+    string message = 1;
+}

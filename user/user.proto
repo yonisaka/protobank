@@ -38,7 +38,7 @@ message UserResponse {
 }
 
 message UsersResponse {
-  repeated UserResponse users = 4;
+  repeated UserResponse users = 1;
 }
 
 message UserListQuery {
